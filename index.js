@@ -56,21 +56,26 @@ async function copyMarkdownImages(markdownFile, targetDirectory) {
   let markdown = fs.readFileSync(markdownFile, 'utf-8');
 
   // Find all image references in the markdown
-  const imageRegex = /!\[[^\]]*\]\(([^\)]+)\)/g;
-  let match;
-  while ((match = imageRegex.exec(markdown)) !== null) {
-    const [imageTag, imagePath] = match;
-    const imageName = path.basename(imagePath);
+  const imageRegex = /!\[[^\]]*\]\(([^\)]+)\)/ig;
 
-    const newImageName = imageName.replace(/[^a-z0-9]/gi, '_');
-    const imageDir = path.join(path.dirname(markdownFile), imagePath)
+  for (let s of markdown.split('\n')) {
+    //console.log('Processing line: ' + s)
+    let match;
+    while ((match = imageRegex.exec(s)) !== null) {
+      //console.log('Found image: ' + match);
+      const [imageTag, imagePath] = match;
+      const imageName = path.basename(imagePath);
 
-    // Copy the image file to the target directory
-    fs.copyFileSync(imageDir, path.join(targetDirectory + '/static', newImageName));
+      const newImageName = imageName.replace(/[^a-z0-9]/gi, '_');
+      const imageDir = path.join(path.dirname(markdownFile), imagePath)
 
-    // Replace the image reference in the markdown
-    const newImageTag = imageTag.replace(imagePath, `/${newImageName}`);
-    markdown = markdown.replace(imageTag, newImageTag);
+      // Copy the image file to the target directory
+      fs.copyFileSync(imageDir, path.join(targetDirectory + '/static', newImageName));
+
+      // Replace the image reference in the markdown
+      const newImageTag = imageTag.replace(imagePath, `/${newImageName}`);
+      markdown = markdown.replace(imageTag, newImageTag);
+    }
   }
 
   // remove the base from the markdown file
@@ -89,6 +94,7 @@ async function copyMarkdownImages(markdownFile, targetDirectory) {
   const files = await scanDirectory(sourceDirectory)
 
   for (const file of files) {
+    console.log('Processing file: ' + file)
     await copyMarkdownImages(file, targetDirectory);
   }
 
