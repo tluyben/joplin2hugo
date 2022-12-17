@@ -39,9 +39,11 @@ Where ~/Documents/Joplin/MyBlog is the location where you export your files to f
 ```
 #!/bin/bash
 
+export PATH=/Users/Me/.nvm/versions/node/v17.9.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin # <-- might or might not be needed, see below
+
 cd /Users/Me/Projects/Myblog # <-- location of the root of your Hugo project
 
-node /Users/Me/Projects/joplin2hugo/index.js ~/Documents/Joplin/MyBlog . #  <!-- change the locations here again; joplin2hugo is this github repository
+node /Users/Me/Projects/joplin2hugo/index.js ~/Documents/Joplin/MyBlog . #  <-- change the locations here again; joplin2hugo is this github repository
 
 hugo # generate 
 
@@ -60,7 +62,11 @@ rm -fR ~/Documents/_resources
 
 ```
 
-Now you might need to manually call your environment (PATH) in the bash file if it is not working properly, *even* if it is working fine when you dry test. 
+Now you might need to manually call your environment (PATH) in the Bash file if it is not working properly, *even* if it is working fine when you dry test. I myself needed to add on top of the Bash file: 
+
+```
+export PATH=/Users/Me/.nvm/versions/node/v17.9.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+```
 
 # License 
 
