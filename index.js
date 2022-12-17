@@ -59,10 +59,8 @@ async function copyMarkdownImages(markdownFile, targetDirectory) {
   const imageRegex = /!\[[^\]]*\]\(([^\)]+)\)/ig;
 
   for (let s of markdown.split('\n')) {
-    //console.log('Processing line: ' + s)
     let match;
     while ((match = imageRegex.exec(s)) !== null) {
-      //console.log('Found image: ' + match);
       const [imageTag, imagePath] = match;
       const imageName = path.basename(imagePath);
 
