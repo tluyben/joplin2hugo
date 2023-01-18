@@ -64,8 +64,12 @@ async function copyMarkdownImages(markdownFile, targetDirectory) {
       const [imageTag, imagePath] = match;
       const imageName = path.basename(imagePath);
 
+      // there is a little issue with this as Joplin already adds %, but it's not guaranteed 
+      // that the filename doesn't already has that
+      const _imageName = decodeURIComponent(imageName)
+
       const newImageName = imageName.replace(/[^a-z0-9]/gi, '_');
-      const imageDir = path.join(path.dirname(markdownFile), imagePath)
+      const imageDir = path.join(path.dirname(markdownFile), path.dirname(imagePath), _imageName)
 
       // Copy the image file to the target directory
       fs.copyFileSync(imageDir, path.join(targetDirectory + '/static', newImageName));
